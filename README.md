@@ -30,7 +30,6 @@ input example:```{
                  	"pemesanan":100,
                  	"terima":99,
                  	"beli":14000,
-                 	"total":12345678,
                  	"kwitansi":"ID-0001",
                  	"catatan": "bagus kok barangnya, ga da masalah"
                  }```
@@ -45,8 +44,7 @@ input example : ```{
                    	"waktu": "2018-01-01 01:00:00",
                    	"keluar":99,
                    	"jual":14000,
-                   	"total":12345678,
-                   	"catatan": "terjual"
+                   	"catatan": "Pesanan ID-0001"
                    }```
 
 4. show laporan penjualan barang

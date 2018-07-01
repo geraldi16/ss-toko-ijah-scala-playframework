@@ -30,9 +30,6 @@ class BarangMasukController @Inject()(cc: ControllerComponents,bm:BarangMasukBui
     val beli:Int = jsonBody.map { json =>
       (json\"beli").as[Int]
     }.get
-    val total:Int = jsonBody.map { json =>
-      (json\"total").as[Int]
-    }.get
     val kwit:String = jsonBody.map { json =>
       (json\"kwitansi").as[String]
     }.get
@@ -41,7 +38,7 @@ class BarangMasukController @Inject()(cc: ControllerComponents,bm:BarangMasukBui
     }.get
 
     //create data baru
-    val create = bm.createBarangMasuk((waktu,sku,itemName,pemesanan,terima,beli,total,kwit,cat))
+    val create = bm.createBarangMasuk((waktu,sku,itemName,pemesanan,terima,beli,kwit,cat))
 
     if (create == "success"){
       result = Json.obj(

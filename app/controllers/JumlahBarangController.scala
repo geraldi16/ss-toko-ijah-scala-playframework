@@ -1,13 +1,19 @@
 package controllers
 
 import Catatan.JumlahBarangBuilder
+import Converter.{DateConverter, IntegerToRupiah}
+import Laporan.NilaiBarangBuilder
 import javax.inject.{Inject, Singleton}
+import org.joda.time.DateTime
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{AbstractController, ControllerComponents}
 
 @Singleton
-class JumlahBarangController @Inject()(cc: ControllerComponents,jbb: JumlahBarangBuilder) extends AbstractController(cc){
+class JumlahBarangController @Inject()(cc: ControllerComponents,jbb: JumlahBarangBuilder,nb:NilaiBarangBuilder) extends AbstractController(cc){
 
+  /*
+    * Fungsi untuk memasukkan data barang ke database
+   */
   def createCatatanJumlahBarang = Action {
     implicit request =>
       var result = Json.obj()
@@ -61,4 +67,24 @@ class JumlahBarangController @Inject()(cc: ControllerComponents,jbb: JumlahBaran
 
       Ok(result).as(JSON)
   }
+
+  /*
+    * untuk menampilkan laporan nilai barang
+   */
+  def showLaporanNilaiBarang() = Action {
+    //minta laporan sesuai tanggal yang diminta
+    val data = nb.getLaporanNilaiBarang()
+
+    //hitung: jumlah sku, total barang, akumulasi nilai total, tanggal cetak hari ini
+    val (skuCount,totalBarang,totalNilai,newdata) = nb.countLaporanNilaiBarang(data)
+
+    Ok(Json.obj(
+      "tanggal_cetak"-> DateConverter.convertTanggalCetak(DateTime.now()),
+      "jumlah_sku"->skuCount,
+      "jumlah_total_barang"->totalBarang,
+      "total_nilai"->IntegerToRupiah.convert(totalNilai),
+      "data"->newdata
+    )).as(JSON)
+  }
+
 }

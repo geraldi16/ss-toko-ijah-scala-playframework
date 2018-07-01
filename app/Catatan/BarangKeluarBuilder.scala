@@ -35,8 +35,8 @@ class BarangKeluarBuilder @Inject()(dbapi: DBApi)(implicit ec: DatabaseExecution
     return SQL(query).as(BarangKeluarStructure *)
   }
 
-  def createBarangKeluar(data:(String,String,String,Int,Int,Int,String)):String = db.withConnection { implicit connection =>
-    val query = s"INSERT INTO barang_keluar VALUES('${data._1}','${data._2}','${data._3}',${data._4},${data._5},${data._6},'${data._7}')"
+  def createBarangKeluar(data:(String,String,String,Int,Int,String)):String = db.withConnection { implicit connection =>
+    val query = s"INSERT INTO barang_keluar VALUES('${data._1}','${data._2}','${data._3}',${data._4},${data._5},${data._5 * data._4},'${data._6}')"
     Try(SQL(query).executeInsert()) match{
       case Failure(e) => {
         return e.getMessage

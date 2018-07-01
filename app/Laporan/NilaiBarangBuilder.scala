@@ -1,34 +1,70 @@
 package Laporan
 
+import Catatan.BarangMasukBuilder
 import DatabaseExecutionContexts.DatabaseExecutionContext
 import anorm.SqlParser.get
 import anorm.{SQL, ~}
 import javax.inject.{Inject, Singleton}
 import play.api.db.DBApi
+import play.api.libs.json.{JsObject, Json}
 
 case class NilaiBarang(sku:String,itemName:String,jumlah:Int,harga:Int,total:Int)
 
 @Singleton
-class NilaiBarangBuilder @Inject()(dbapi: DBApi)(implicit ec: DatabaseExecutionContext) {
+class NilaiBarangBuilder @Inject()(dbapi: DBApi,bm:BarangMasukBuilder)(implicit ec: DatabaseExecutionContext) {
   private val db = dbapi.database("default")
-
+  private val hargaAverageList = bm.getHargaBeliAverageList()
   /**
     * Parse a Object from a ResultSet
     * output : id object
     */
   private[Laporan] val LaporanNilaiBarangStructure = {
-    get[Option[String]]("laporan_nilai_barang.sku") ~
-      get[Option[String]]("laporan_nilai_barang.item_name") ~
-      get[Option[Int]]("laporan_nilai_barang.jumlah") ~
-      get[Option[Int]]("laporan_nilai_barang.harga_beli_avg") ~
-      get[Option[Int]]("laporan_nilai_barang.total") map {
-      case sku ~ itemName ~ jumlah ~ beli ~ total=> NilaiBarang(sku.getOrElse(""), itemName.getOrElse(""), jumlah.getOrElse(0), beli.getOrElse(0), total.getOrElse(0))
+    get[Option[String]]("jumlah_barang.sku") ~
+      get[Option[String]]("jumlah_barang.item_name") ~
+      get[Option[Int]]("jumlah_barang.qty") map {
+      case sku ~ itemName ~ jumlah => {
+        val (beli,total) = getAverageAndTotal(sku.getOrElse(""),jumlah.getOrElse(0))
+        NilaiBarang(sku.getOrElse(""), itemName.getOrElse(""), jumlah.getOrElse(0), beli,total)
+      }
     }
   }
 
   def getLaporanNilaiBarang(dateStart:String="",dateEnd:String=""):List[NilaiBarang] = db.withConnection{implicit connection =>
-    val query = s"select * from laporan_nilai_barang where 1"
+    val query = s"select * from jumlah_barang where 1"
 
     return SQL(query).as(LaporanNilaiBarangStructure *)
+  }
+
+  /*
+    * fungsi utk cari harga beli rata-rata dan total nilai
+   */
+  def getAverageAndTotal(sku:String,jumlah:Int):(Int,Int) = {
+    val avg = hargaAverageList.get(sku).getOrElse(0)
+    return (avg, avg * jumlah)
+  }
+
+  /*
+    * fungsi utk membuat data rangkuman yang ada di awal report sheet
+   */
+  def countLaporanNilaiBarang(data:List[NilaiBarang]):(Int,Int,Int,List[JsObject]) = {
+    var sku = 0
+    var jumlah = 0
+    var total = 0
+    var convertedValue = List.empty[JsObject]
+
+    data.foreach{datum=>
+      sku += 1
+      jumlah += datum.jumlah
+      total += datum.total
+      convertedValue = convertedValue :+ Json.obj(
+        "sku"->datum.sku,
+        "item_name"->datum.itemName,
+        "jumlah"->datum.jumlah,
+        "harga_average"->datum.harga,
+        "total"->datum.total
+      )
+    }
+
+    (sku,jumlah,total,convertedValue)
   }
 }
