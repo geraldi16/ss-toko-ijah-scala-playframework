@@ -18,3 +18,7 @@ POST    /create/barang-keluar      controllers.BarangKeluarController.createCata
 
 GET     /export/penjualan           controllers.DataMigrationController.exportLaporanPenjualan(ds:String,de:String)
 GET     /export/nilai-barang        controllers.DataMigrationController.exportLaporanNilaiBarang
+
+GET     /import/jumlah-barang       controllers.DataMigrationController.importJumlahBarang(filename:String)
+GET     /import/barang-keluar       controllers.DataMigrationController.importBarangKeluar(filename:String)
+GET     /import/barang-masuk       controllers.DataMigrationController.importBarangMasuk(filename:String)

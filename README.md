@@ -7,7 +7,9 @@ Database : SQLite
 
 Simple Script :
 =======================
-<not defined yet>
+it's so simple! Just write
+$ sbt run
+in your terminal in your project directory, and VOILA! It's running and you can try it
 
 Toko Ijah Inventory Activities:
 ==========================
@@ -53,4 +55,12 @@ method : GET
 
 5. show laporan nilai barang
 routes : `/laporan/nilai-barang`
+method : GET
+
+6. export laporan penjualan barang
+routes : `/export/penjualan`
+method : GET
+
+7. export laporan nilai barang
+routes : `/export/nilai-barang`
 method : GET

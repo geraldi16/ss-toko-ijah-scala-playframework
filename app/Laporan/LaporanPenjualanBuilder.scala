@@ -73,7 +73,7 @@ class LaporanPenjualanBuilder @Inject()(dbapi: DBApi, bm:BarangMasukBuilder)(imp
   /*
    * fungsi untuk membuat data rangkuman yang ada di awal report penjualan
    */
-  def countLaporanPenjualan(data: List[LaporanPenjualan],convertRupiah:Boolean=true):(Int,Int,Int,Int,List[JsObject]) = {
+  def countLaporanPenjualan(data: List[LaporanPenjualan],convertRupiah:Boolean=true):(Long,Long,Int,Int,List[JsObject]) = {
     var omzet = 0
     var labakotor = 0
     var penjualan = 0

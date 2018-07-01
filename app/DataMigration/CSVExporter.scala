@@ -14,8 +14,8 @@ sealed trait CSVExporter {
       Row().withCellValues(),
       Row().withCellValues("Tanggal Cetak",(data \ "tanggal_cetak").as[String]),
       Row().withCellValues("Tanggal",(data \ "tanggal").as[String]),
-      Row().withCellValues("Total Omzet",(data \ "total_omzet").as[Int]),
-      Row().withCellValues("Total Laba Kotor",(data \ "total_laba_kotor").as[Int]),
+      Row().withCellValues("Total Omzet",(data \ "total_omzet").as[String]),
+      Row().withCellValues("Total Laba Kotor",(data \ "total_laba_kotor").as[String]),
       Row().withCellValues("Total Penjualan",(data \ "total_penjualan").as[Int]),
       Row().withCellValues("Total Barang",(data \ "total_barang").as[Int]),
       Row().withCellValues(),
@@ -56,7 +56,7 @@ sealed trait CSVExporter {
       Row().withCellValues("Tanggal Cetak",(data \ "tanggal_cetak").as[String]),
       Row().withCellValues("Jumlah SKU",(data \ "jumlah_sku").as[Int]),
       Row().withCellValues("Jumlah Total Barang",(data \ "jumlah_total_barang").as[Int]),
-      Row().withCellValues("Jumlah Total Nilai",(data \ "total_nilai").as[Int]),
+      Row().withCellValues("Jumlah Total Nilai",(data \ "total_nilai").as[String]),
       Row().withCellValues(),
       Row(style = CellStyle(font = Font(bold = true))).withCellValues("SKU","Nama Item","Jumlah","Rata-rata Harga Beli","Total")
     )

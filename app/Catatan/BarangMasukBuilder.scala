@@ -53,6 +53,10 @@ class BarangMasukBuilder @Inject()(dbapi: DBApi)(implicit ec: DatabaseExecutionC
     return SQL(query).as(BarangMasukStructure *)
   }
 
+  /*
+   * Fungsi utk mendapatkan harga beli rata dari tiap SKU
+   * return : List(Map(sku, harga beli rata2))
+   */
   def getHargaBeliAverageList(dateStart:String="",dateEnd:String=""):Map[String,Int] = db.withConnection{implicit connection =>
     var query = ""
     if (dateEnd == "" || dateStart ==""){
