@@ -15,3 +15,6 @@ GET     /laporan/penjualan          controllers.BarangKeluarController.showLapor
 POST    /create/jumlah-barang       controllers.JumlahBarangController.createCatatanJumlahBarang
 POST    /create/barang-masuk       controllers.BarangMasukController.createCatatanBarangMasuk
 POST    /create/barang-keluar      controllers.BarangKeluarController.createCatatanBarangKeluar
+
+GET     /export/penjualan           controllers.DataMigrationController.exportLaporanPenjualan(ds:String,de:String)
+GET     /export/nilai-barang        controllers.DataMigrationController.exportLaporanNilaiBarang

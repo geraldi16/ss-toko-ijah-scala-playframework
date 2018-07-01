@@ -19,7 +19,7 @@ class BarangMasukController @Inject()(cc: ControllerComponents,bm:BarangMasukBui
       (json\"item_name").as[String]
     }.get
     val waktu:String = jsonBody.map { json =>
-      (json\"waktu").as[String]
+      (json \ "waktu").as[String]
     }.get
     val pemesanan:Int = jsonBody.map { json =>
       (json\"pemesanan").as[Int]

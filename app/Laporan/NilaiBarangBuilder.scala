@@ -1,6 +1,7 @@
 package Laporan
 
 import Catatan.BarangMasukBuilder
+import Converter.IntegerToRupiah
 import DatabaseExecutionContexts.DatabaseExecutionContext
 import anorm.SqlParser.get
 import anorm.{SQL, ~}
@@ -46,25 +47,27 @@ class NilaiBarangBuilder @Inject()(dbapi: DBApi,bm:BarangMasukBuilder)(implicit 
   /*
     * fungsi utk membuat data rangkuman yang ada di awal report sheet
    */
-  def countLaporanNilaiBarang(data:List[NilaiBarang]):(Int,Int,Int,List[JsObject]) = {
+  def countLaporanNilaiBarang(data:List[NilaiBarang],convertRupiah:Boolean=true):(Int,Int,Int,List[JsObject]) = {
     var sku = 0
     var jumlah = 0
-    var total = 0
+    var totalNilai = 0
     var convertedValue = List.empty[JsObject]
 
     data.foreach{datum=>
       sku += 1
       jumlah += datum.jumlah
-      total += datum.total
+      totalNilai += datum.total
+      val harga = if (convertRupiah) IntegerToRupiah.convert(datum.harga) else datum.harga.toString
+      val total = if (convertRupiah) IntegerToRupiah.convert(datum.total) else datum.harga.toString
       convertedValue = convertedValue :+ Json.obj(
         "sku"->datum.sku,
         "item_name"->datum.itemName,
         "jumlah"->datum.jumlah,
-        "harga_average"->datum.harga,
-        "total"->datum.total
+        "harga_average"-> harga,
+        "total"->total
       )
     }
 
-    (sku,jumlah,total,convertedValue)
+    (sku,jumlah,totalNilai,convertedValue)
   }
 }

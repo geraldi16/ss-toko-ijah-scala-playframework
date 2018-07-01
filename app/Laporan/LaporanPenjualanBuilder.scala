@@ -1,6 +1,7 @@
 package Laporan
 
 import Catatan.BarangMasukBuilder
+import Converter.IntegerToRupiah
 import DatabaseExecutionContexts.DatabaseExecutionContext
 import anorm.SqlParser.get
 import anorm.{SQL, ~}
@@ -72,33 +73,38 @@ class LaporanPenjualanBuilder @Inject()(dbapi: DBApi, bm:BarangMasukBuilder)(imp
   /*
    * fungsi untuk membuat data rangkuman yang ada di awal report penjualan
    */
-  def countLaporanPenjualan(data: List[LaporanPenjualan]):(Int,Int,Int,Int,List[JsObject]) = {
+  def countLaporanPenjualan(data: List[LaporanPenjualan],convertRupiah:Boolean=true):(Int,Int,Int,Int,List[JsObject]) = {
     var omzet = 0
-    var laba = 0
+    var labakotor = 0
     var penjualan = 0
     var barang = 0
     var newdata = List.empty[JsObject]
 
     data.foreach{datum=>
       omzet += datum.total
-      laba += datum.laba
+      labakotor += datum.laba
       barang += datum.jumlah
       if (datum.idPesanan != ""){
         penjualan += 1
       }
+      val harga_jual = if (convertRupiah) IntegerToRupiah.convert(datum.hargaJual) else datum.hargaJual.toString
+      val harga_beli = if (convertRupiah) IntegerToRupiah.convert(datum.hargaBeli) else datum.hargaBeli.toString
+      val total = if (convertRupiah) IntegerToRupiah.convert(datum.total) else datum.total.toString
+      val laba = if (convertRupiah) IntegerToRupiah.convert(datum.laba) else datum.laba.toString
+
       newdata = newdata :+ Json.obj(
         "id_pesanan"->datum.idPesanan,
         "waktu"->datum.waktu,
         "sku"->datum.sku,
         "item_name"->datum.itemName,
         "jumlah"->datum.jumlah,
-        "harga_jual"->datum.hargaJual,
-        "total"->datum.total,
-        "harga_beli"->datum.hargaBeli,
-        "laba"->datum.laba
+        "harga_jual"->harga_jual,
+        "total"->total,
+        "harga_beli"->harga_beli,
+        "laba"->laba
       )
     }
 
-    (omzet,laba,penjualan,barang,newdata)
+    (omzet,labakotor,penjualan,barang,newdata)
   }
 }
