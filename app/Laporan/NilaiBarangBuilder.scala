@@ -14,7 +14,7 @@ case class NilaiBarang(sku:String,itemName:String,jumlah:Int,harga:Int,total:Int
 @Singleton
 class NilaiBarangBuilder @Inject()(dbapi: DBApi,bm:BarangMasukBuilder)(implicit ec: DatabaseExecutionContext) {
   private val db = dbapi.database("default")
-  private val hargaAverageList = bm.getHargaBeliAverageList()
+  private var hargaAverageList = bm.getHargaBeliAverageList()
   /**
     * Parse a Object from a ResultSet
     * output : id object
@@ -31,6 +31,8 @@ class NilaiBarangBuilder @Inject()(dbapi: DBApi,bm:BarangMasukBuilder)(implicit 
   }
 
   def getLaporanNilaiBarang(dateStart:String="",dateEnd:String=""):List[NilaiBarang] = db.withConnection{implicit connection =>
+    //update hargaAverageList
+    this.hargaAverageList = bm.getHargaBeliAverageList()
     val query = s"select * from jumlah_barang where 1"
 
     return SQL(query).as(LaporanNilaiBarangStructure *)

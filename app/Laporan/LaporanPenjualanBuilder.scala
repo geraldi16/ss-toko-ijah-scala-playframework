@@ -14,7 +14,7 @@ case class LaporanPenjualan(idPesanan:String,waktu:String,sku:String,itemName:St
 @Singleton
 class LaporanPenjualanBuilder @Inject()(dbapi: DBApi, bm:BarangMasukBuilder)(implicit ec: DatabaseExecutionContext){
   private val db = dbapi.database("default")
-  private val hargaAverageList = bm.getHargaBeliAverageList()
+  private var hargaAverageList = bm.getHargaBeliAverageList()
 
   /**
     * Parse a Object from a ResultSet
@@ -37,7 +37,11 @@ class LaporanPenjualanBuilder @Inject()(dbapi: DBApi, bm:BarangMasukBuilder)(imp
   }
 
   def getLaporanPenjualan(dateStart:String="",dateEnd:String=""):List[LaporanPenjualan] = db.withConnection{implicit connection =>
+    //update hargaAverageList
+    this.hargaAverageList = bm.getHargaBeliAverageList()
+
     var query = ""
+    val hargaAverageList = bm.getHargaBeliAverageList() //takutnya belum ke inisiasi di awal
     if (dateEnd=="" || dateStart == ""){
       query = s"select * from barang_keluar where 1"
     }else{

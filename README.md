@@ -13,7 +13,7 @@ $ sbt run
 ```
 in your terminal in your project directory, and VOILA! It's running and you can try it
 
-###Database Structure
+Database Structure
 ===================
 1. table jumlah_barang
 columns:
@@ -40,7 +40,7 @@ columns:
 -total int
 -catatan text
 -id Integer autoincrement
-###Toko Ijah Inventory Activities:
+Toko Ijah Inventory Activities:
 ==========================
 Postman url : import this link for easier way checking this API.
 ```https://www.getpostman.com/collections/693dd269bbcf99cdf24e```.
@@ -78,14 +78,17 @@ input example:
 3. Store barang keluar.
 routes : `/create/barang-keluar`.
 method : POST.
-input example : ```{
-                   	"sku":"abc",
-                   	"item_name":"baju",
-                   	"waktu": "2018-01-01 01:00:00",
-                   	"keluar":99,
-                   	"jual":14000,
-                   	"catatan": "Pesanan ID-0001"
-                   }```
+input example :
+```
+{
+    "sku":"abc",
+    "item_name":"baju",
+    "waktu": "2018-01-01 01:00:00",
+    "keluar":99,
+    "jual":14000,
+    "catatan": "Pesanan ID-0001"
+}
+```
 
 4. show laporan penjualan barang.
 routes : `/laporan/penjualan?ds=<yyyy-mm-dd>&de=<yyyy-mm-dd>`.
@@ -102,3 +105,12 @@ method : GET.
 7. export laporan nilai barang.
 routes : `/export/nilai-barang`.
 method : GET.
+
+8. import catatan jumlah barang.
+routes : `/import/jumlah-barang?filename=<file name only>`
+
+9. import catatan barang masuk.
+routes : `/import/barang-masuk?filename=<file name only>`
+
+10. import catatan barang keluar.
+routes : `/import/barang-keluar?filename=<file name only>`
