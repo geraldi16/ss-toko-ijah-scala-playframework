@@ -1,0 +1,10 @@
+LAPORAN NILAI BARANG
+
+Tanggal Cetak,2 Jul 2018
+Jumlah SKU,2.0
+Jumlah Total Barang,200.0
+Jumlah Total Nilai,Rp993.900.00
+
+SKU,Nama Item,Jumlah,Rata-rata Harga Beli,Total
+def,celana,100.0,Rp0.00,Rp0.00
+abcd,kaos kaki,100.0,Rp9.939.00,Rp993.900.00

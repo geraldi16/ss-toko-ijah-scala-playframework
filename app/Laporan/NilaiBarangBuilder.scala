@@ -47,7 +47,7 @@ class NilaiBarangBuilder @Inject()(dbapi: DBApi,bm:BarangMasukBuilder)(implicit 
   /*
     * fungsi utk membuat data rangkuman yang ada di awal report sheet
    */
-  def countLaporanNilaiBarang(data:List[NilaiBarang],convertRupiah:Boolean=true):(Int,Int,Long,List[JsObject]) = {
+  def countLaporanNilaiBarang(data:List[NilaiBarang]):(Int,Int,Long,List[JsObject]) = {
     var sku = 0
     var jumlah = 0
     var totalNilai = 0
@@ -57,14 +57,12 @@ class NilaiBarangBuilder @Inject()(dbapi: DBApi,bm:BarangMasukBuilder)(implicit 
       sku += 1
       jumlah += datum.jumlah
       totalNilai += datum.total
-      val harga = if (convertRupiah) IntegerToRupiah.convert(datum.harga) else datum.harga.toString
-      val total = if (convertRupiah) IntegerToRupiah.convert(datum.total) else datum.harga.toString
       convertedValue = convertedValue :+ Json.obj(
         "sku"->datum.sku,
         "item_name"->datum.itemName,
         "jumlah"->datum.jumlah,
-        "harga_average"-> harga,
-        "total"->total
+        "harga_average"-> IntegerToRupiah.convert(datum.harga),
+        "total"->IntegerToRupiah.convert(datum.total)
       )
     }
 

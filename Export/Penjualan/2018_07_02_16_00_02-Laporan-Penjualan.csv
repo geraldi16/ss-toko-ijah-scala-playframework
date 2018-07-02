@@ -1,0 +1,13 @@
+LAPORAN PENJUALAN
+
+Tanggal Cetak,2 Jul 2018
+Tanggal,1 Jan 2018 - 2 Feb 2018
+Total Omzet,Rp2,914,000.00
+Total Laba Kotor,(Rp7,124,390.00)
+Total Penjualan,3.0
+Total Barang,1010.0
+
+ID Pesanan,Waktu,SKU,Nama Barang,Jumlah,Harga Jual,Total,Harga Beli,Laba
+ID-0002,2018-01-01 01:00:00,abcd,kaos kaki,999.0,Rp19,300.00,Rp2,350,000.00,Rp9,939.00,(Rp7,579,061.00)
+ID-0002,2018-01-01 01:00:00,abcd,kaos kaki,5.0,Rp5,000.00,Rp282,000.00,Rp9,939.00,Rp232,305.00
+ID-0002,2018-01-01 01:00:00,abcd,kaos kaki,6.0,Rp47,000.00,Rp282,000.00,Rp9,939.00,Rp222,366.00

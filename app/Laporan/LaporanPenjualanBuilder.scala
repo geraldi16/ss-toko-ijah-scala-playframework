@@ -73,7 +73,7 @@ class LaporanPenjualanBuilder @Inject()(dbapi: DBApi, bm:BarangMasukBuilder)(imp
   /*
    * fungsi untuk membuat data rangkuman yang ada di awal report penjualan
    */
-  def countLaporanPenjualan(data: List[LaporanPenjualan],convertRupiah:Boolean=true):(Long,Long,Int,Int,List[JsObject]) = {
+  def countLaporanPenjualan(data: List[LaporanPenjualan]):(Long,Long,Int,Int,List[JsObject]) = {
     var omzet = 0
     var labakotor = 0
     var penjualan = 0
@@ -87,10 +87,6 @@ class LaporanPenjualanBuilder @Inject()(dbapi: DBApi, bm:BarangMasukBuilder)(imp
       if (datum.idPesanan != ""){
         penjualan += 1
       }
-      val harga_jual = if (convertRupiah) IntegerToRupiah.convert(datum.hargaJual) else datum.hargaJual.toString
-      val harga_beli = if (convertRupiah) IntegerToRupiah.convert(datum.hargaBeli) else datum.hargaBeli.toString
-      val total = if (convertRupiah) IntegerToRupiah.convert(datum.total) else datum.total.toString
-      val laba = if (convertRupiah) IntegerToRupiah.convert(datum.laba) else datum.laba.toString
 
       newdata = newdata :+ Json.obj(
         "id_pesanan"->datum.idPesanan,
@@ -98,10 +94,10 @@ class LaporanPenjualanBuilder @Inject()(dbapi: DBApi, bm:BarangMasukBuilder)(imp
         "sku"->datum.sku,
         "item_name"->datum.itemName,
         "jumlah"->datum.jumlah,
-        "harga_jual"->harga_jual,
-        "total"->total,
-        "harga_beli"->harga_beli,
-        "laba"->laba
+        "harga_jual"->IntegerToRupiah.convert(datum.hargaJual),
+        "total"->IntegerToRupiah.convert(datum.total),
+        "harga_beli"->IntegerToRupiah.convert(datum.hargaBeli),
+        "laba"->IntegerToRupiah.convert(datum.laba)
       )
     }
 
