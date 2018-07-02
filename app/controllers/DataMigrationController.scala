@@ -2,7 +2,7 @@ package controllers
 
 import Catatan.{BarangKeluarBuilder, BarangMasukBuilder, JumlahBarangBuilder}
 import Converter.{DateConverter, IntegerToRupiah}
-import DataMigration.{CSVExporter, CSVImporter}
+import DataMigration.CSVExporter
 import Laporan.{LaporanPenjualanBuilder, NilaiBarangBuilder}
 import javax.inject.{Inject, Singleton}
 import org.joda.time.DateTime
@@ -76,7 +76,7 @@ class DataMigrationController @Inject()(cc: ControllerComponents, nb:NilaiBarang
       val oldrow = line.split(",").map(_.trim)
       //insert row ke database
       val row = appendSeparatedString(oldrow.toList)
-      bm.createBarangMasuk((row(0),row(1),row(2),row(3).toInt,row(4).toInt,row(5).toInt,row(7),row(8)))
+      bm.createBarangMasuk((row(0),row(1),row(2),row(3).toInt,row(4).toInt,row(5).toInt,row(7),row(8)),true)
     }
     Ok("data imported!")
   }
@@ -89,7 +89,7 @@ class DataMigrationController @Inject()(cc: ControllerComponents, nb:NilaiBarang
       val row = line.split(",").map(_.trim)
       //insert row ke database
       val newrow = appendSeparatedString(row.toList)
-      bk.createBarangKeluar((newrow(0),newrow(1),newrow(2),newrow(3).toInt,newrow(4).toInt,newrow(6)))
+      bk.createBarangKeluar((newrow(0),newrow(1),newrow(2),newrow(3).toInt,newrow(4).toInt,newrow(6)),true)
     }
     Ok("data imported!")
   }

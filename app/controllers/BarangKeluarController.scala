@@ -5,7 +5,7 @@ import Converter.{DateConverter, IntegerToRupiah}
 import Laporan.LaporanPenjualanBuilder
 import javax.inject.{Inject, Singleton}
 import org.joda.time.DateTime
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsArray, JsObject, JsValue, Json}
 import play.api.mvc.{AbstractController, ControllerComponents}
 
 @Singleton
@@ -49,6 +49,40 @@ class BarangKeluarController @Inject()(cc: ControllerComponents,bk:BarangKeluarB
       result = Json.obj(
         "status"->s"error",
         "message"->create
+      )
+    }
+    Ok(result).as(JSON)
+  }
+
+  def updateCatatanBarangKeluar() = Action {implicit request =>
+    var result = Json.obj()
+    //get request params
+    val jsonBody: JsValue = request.body.asJson.get
+    val jsonItems = (jsonBody \"items").as[List[JsObject]]
+    val jsonWhere = (jsonBody \"where").as[List[JsObject]]
+    var items:Map[String,Any] = Map()
+    var where:Map[String,Any] = Map()
+
+    jsonItems.foreach{json=>
+      items = items +((json \ "name").as[String]->(json \ "value").as[String])
+    }
+
+    jsonWhere.foreach{json=>
+      where = where +((json \ "name").as[String]->(json \ "value").as[String])
+    }
+
+    //update data
+    val update = bk.updateBarangKeluar(items,where)
+
+    if (update == "success"){
+      result = Json.obj(
+        "status"->"success",
+        "message"-> jsonBody.toString
+      )
+    }else{
+      result = Json.obj(
+        "status"->s"error",
+        "message"->update
       )
     }
     Ok(result).as(JSON)

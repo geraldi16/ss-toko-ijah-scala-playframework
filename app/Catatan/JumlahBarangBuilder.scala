@@ -27,8 +27,12 @@ class JumlahBarangBuilder @Inject()(dbapi: DBApi)(implicit ec: DatabaseExecution
     }
   }
 
-  def getJumlahBarangData():List[JumlahBarang] = db.withConnection { implicit connection =>
-    val query = s"select * from jumlah_barang where 1"
+  def getJumlahBarangData(sku:String=""):List[JumlahBarang] = db.withConnection { implicit connection =>
+      var query = s"select * from jumlah_barang"
+    if (sku != ""){
+      query += s" where sku = '$sku'"
+    }
+
       return SQL(query).as(jumlahBarangStructure *)
   }
 

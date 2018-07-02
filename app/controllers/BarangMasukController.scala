@@ -2,7 +2,7 @@ package controllers
 
 import Catatan.BarangMasukBuilder
 import javax.inject.{Inject, Singleton}
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.{AbstractController, ControllerComponents}
 
 @Singleton
@@ -49,6 +49,40 @@ class BarangMasukController @Inject()(cc: ControllerComponents,bm:BarangMasukBui
       result = Json.obj(
         "status"->s"error",
         "message"->create
+      )
+    }
+    Ok(result).as(JSON)
+  }
+
+  def updateCatatanBarangMasuk() = Action {implicit request =>
+    var result = Json.obj()
+    //get request params
+    val jsonBody: JsValue = request.body.asJson.get
+    val jsonItems = (jsonBody \"items").as[List[JsObject]]
+    val jsonWhere = (jsonBody \"where").as[List[JsObject]]
+    var items:Map[String,Any] = Map()
+    var where:Map[String,Any] = Map()
+
+    jsonItems.foreach{json=>
+      items = items +((json \ "name").as[String]->(json \ "value").as[String])
+    }
+
+    jsonWhere.foreach{json=>
+      where = where +((json \ "name").as[String]->(json \ "value").as[String])
+    }
+
+    //update data
+    val update = bm.updateBarangMasuk(items,where)
+
+    if (update == "success"){
+      result = Json.obj(
+        "status"->"success",
+        "message"-> jsonBody.toString
+      )
+    }else{
+      result = Json.obj(
+        "status"->s"error",
+        "message"->update
       )
     }
     Ok(result).as(JSON)
